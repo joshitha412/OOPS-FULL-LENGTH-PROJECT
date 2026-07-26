@@ -1,0 +1,103 @@
+import java.util.Scanner;
+
+class Payment {
+
+    protected double amount;
+
+    public Payment(double amount) {
+        this.amount = amount;
+    }
+
+    public void pay() {
+        System.out.println("Processing generic payment...");
+    }
+}
+
+class CreditCardPayment extends Payment {
+
+    private String cardNumber;
+
+    public CreditCardPayment(double amount, String cardNumber) {
+        super(amount);
+        this.cardNumber = cardNumber;
+    }
+
+    @Override
+    public void pay() {
+        System.out.println("Paid ₹" + amount + " using Credit Card: " + cardNumber);
+    }
+}
+
+class UPIPayment extends Payment {
+
+    private String upiId;
+
+    public UPIPayment(double amount, String upiId) {
+        super(amount);
+        this.upiId = upiId;
+    }
+
+    @Override
+    public void pay() {
+        System.out.println("Paid ₹" + amount + " using UPI: " + upiId);
+    }
+}
+
+class ShoppingCart {
+
+    private Payment payment;
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public void checkout() {
+
+        if (payment != null) {
+            payment.pay();
+        } else {
+            System.out.println("No payment method selected.");
+        }
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        ShoppingCart cart = new ShoppingCart();
+
+        System.out.print("Enter amount: ");
+        double amount = sc.nextDouble();
+
+        System.out.println("Choose Payment Method:");
+        System.out.println("1. Credit Card");
+        System.out.println("2. UPI");
+
+        int choice = sc.nextInt();
+        sc.nextLine();
+
+        Payment payment;
+
+        if (choice == 1) {
+
+            System.out.print("Enter Card Number: ");
+            String card = sc.nextLine();
+
+            payment = new CreditCardPayment(amount, card);
+
+        } else {
+
+            System.out.print("Enter UPI ID: ");
+            String upi = sc.nextLine();
+
+            payment = new UPIPayment(amount, upi);
+        }
+
+        cart.setPayment(payment);
+        cart.checkout();
+
+        sc.close();
+    }
+}
